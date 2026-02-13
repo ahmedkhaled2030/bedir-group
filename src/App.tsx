@@ -39,22 +39,19 @@ const AdminInquiries = lazy(() => import("./pages/AdminInquiries"));
 
 const queryClient = new QueryClient();
 
-// Loading fallback component
+// Loading fallback component — elegant gold line
 const PageLoader = () => (
-  <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-charcoal via-charcoal-dark to-black">
-    <div className="flex flex-col items-center gap-6">
-      <div className="bg-white rounded-lg p-2 md:p-3 shadow-xl animate-pulse">
-        <img 
-          src="/banner.png" 
-          alt="Bedir Group" 
-          className="h-16 sm:h-20 md:h-24 lg:h-28 w-auto"
-        />
-      </div>
-      <div className="flex flex-col items-center gap-3">
-        <div className="h-1 w-32 overflow-hidden rounded-full bg-white/20">
-          <div className="h-full w-1/2 animate-[loading_1s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-gold to-gold-light" />
-        </div>
-        <p className="font-display text-sm md:text-base text-gold tracking-widest uppercase">Where Design Meets Construction</p>
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-charcoal/95 backdrop-blur-sm">
+    <div className="flex flex-col items-center gap-8">
+      {/* Logo */}
+      <img
+        src="/logo-light.png"
+        alt="Bedir Group"
+        className="h-12 md:h-16 w-auto opacity-90 animate-[fadeInScale_0.6s_ease-out_both]"
+      />
+      {/* Animated gold line */}
+      <div className="relative h-[2px] w-40 overflow-hidden rounded-full bg-white/10">
+        <div className="absolute inset-y-0 left-0 w-2/3 animate-[shimmer_1.2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-transparent via-gold to-transparent" />
       </div>
     </div>
   </div>

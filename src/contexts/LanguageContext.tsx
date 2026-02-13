@@ -440,7 +440,7 @@ const translations: Record<Language, Record<string, string>> = {
     "ai.authDescription": "Please sign in to access the AI Architect tool. Create stunning 3D designs and bring your vision to life.",
 
     // Blog
-    "blog.title": "Design Journal",
+    "blog.title": "Design Blog",
     "blog.subtitle": "Insights & Inspiration",
     "blog.description": "Explore our latest insights on interior design, architecture, and the art of creating beautiful spaces.",
     "blog.searchPlaceholder": "Search articles...",
@@ -449,7 +449,7 @@ const translations: Record<Language, Record<string, string>> = {
     "blog.noPosts": "No Articles Found",
     "blog.noPostsDescription": "Check back soon for new content.",
     "blog.postNotFound": "Article Not Found",
-    "blog.backToBlog": "Back to Journal",
+    "blog.backToBlog": "Back to Blog",
     "blog.relatedPosts": "Related Articles",
     "blog.like": "Like",
     "blog.liked": "Liked",
@@ -520,7 +520,7 @@ const translations: Record<Language, Record<string, string>> = {
     "admin.closed": "Closed",
 
     // Navbar additions
-    "nav.blog": "Journal",
+    "nav.blog": "Blog",
     "nav.signIn": "Sign In",
   },
   ar: {
@@ -1979,7 +1979,7 @@ const translations: Record<Language, Record<string, string>> = {
     "ai.authDescription": "Bitte melden Sie sich an, um den KI-Architekten zu nutzen. Erstellen Sie atemberaubende 3D-Designs.",
 
     // Blog
-    "blog.title": "Design-Journal",
+    "blog.title": "Design-Blog",
     "blog.subtitle": "Einblicke & Inspiration",
     "blog.description": "Entdecken Sie unsere neuesten Einblicke in Innenarchitektur, Architektur und die Kunst schöner Räume.",
     "blog.searchPlaceholder": "Artikel suchen...",
@@ -1988,7 +1988,7 @@ const translations: Record<Language, Record<string, string>> = {
     "blog.noPosts": "Keine Artikel gefunden",
     "blog.noPostsDescription": "Schauen Sie bald wieder vorbei.",
     "blog.postNotFound": "Artikel nicht gefunden",
-    "blog.backToBlog": "Zurück zum Journal",
+    "blog.backToBlog": "Zurück zum Blog",
     "blog.relatedPosts": "Verwandte Artikel",
     "blog.like": "Gefällt mir",
     "blog.liked": "Gefällt mir",
@@ -2059,7 +2059,7 @@ const translations: Record<Language, Record<string, string>> = {
     "admin.closed": "Geschlossen",
 
     // Navbar additions
-    "nav.blog": "Journal",
+    "nav.blog": "Blog",
     "nav.signIn": "Anmelden",
   },
 };

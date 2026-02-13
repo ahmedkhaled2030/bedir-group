@@ -280,13 +280,14 @@ const BlogCard = ({
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.05 }}
+    className="h-full"
   >
     <Link
       to={`/blog/${post.slug}`}
-      className="group block rounded-2xl bg-white overflow-hidden shadow-sm border border-charcoal/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-500"
+      className="group flex flex-col h-full rounded-2xl bg-white overflow-hidden shadow-sm border border-charcoal/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-500"
     >
       {/* Image */}
-      <div className="aspect-[16/10] overflow-hidden bg-gray-100">
+      <div className="aspect-[16/10] overflow-hidden bg-gray-100 flex-shrink-0">
         {post.cover_image ? (
           <img
             src={post.cover_image}
@@ -301,7 +302,7 @@ const BlogCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-5 flex flex-col flex-1">
         <div className="flex items-center gap-3 mb-3">
           <span className="rounded-full bg-charcoal/5 px-3 py-1 font-body text-xs text-charcoal-light">
             {post.category.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
@@ -316,11 +317,11 @@ const BlogCard = ({
           {post.title[language] || post.title.en}
         </h3>
 
-        <p className="font-body text-sm text-charcoal-light line-clamp-2 mb-4">
+        <p className="font-body text-sm text-charcoal-light line-clamp-2 mb-4 flex-1">
           {post.excerpt[language] || post.excerpt.en}
         </p>
 
-        <div className="flex items-center justify-between pt-3 border-t border-charcoal/5">
+        <div className="flex items-center justify-between pt-3 border-t border-charcoal/5 mt-auto">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-full bg-gold/20 flex items-center justify-center">
               <span className="font-body text-xs font-medium text-gold">

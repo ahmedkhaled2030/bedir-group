@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -45,18 +46,33 @@ const fadeUpVariants = {
 
 const Hero = ({ onOpenAIModal }: HeroProps) => {
   const { t, dir } = useLanguage();
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   return (
     <section className="relative h-screen w-full overflow-hidden" dir={dir}>
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
+        {/* Poster shown immediately while video loads */}
+        <div
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+            videoLoaded ? "opacity-0" : "opacity-100"
+          }`}
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053')",
+          }}
+        />
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="h-full w-full object-cover"
-          poster="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053"
+          preload="auto"
+          onCanPlayThrough={() => setVideoLoaded(true)}
+          onPlaying={() => setVideoLoaded(true)}
+          className={`h-full w-full object-cover transition-opacity duration-1000 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
         >
           <source
             src="/hero-video.mp4"
