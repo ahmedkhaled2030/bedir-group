@@ -125,9 +125,7 @@ const AdminCareerEditor = () => {
 
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-      if (!isEditing) {
-        setTimeout(() => navigate("/admin/careers"), 500);
-      }
+      setTimeout(() => navigate("/admin/careers"), 500);
     } catch (err) {
       console.error("Failed to save career:", err);
       toast.error("Failed to save career listing", {

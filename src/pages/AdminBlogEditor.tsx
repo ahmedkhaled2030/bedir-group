@@ -146,9 +146,7 @@ const AdminBlogEditor = () => {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
 
-      if (!isEditing) {
-        setTimeout(() => navigate("/admin/blog"), 500);
-      }
+      setTimeout(() => navigate("/admin/blog"), 500);
     } catch (err) {
       console.error("Failed to save post:", err);
       toast.error("Failed to save post", {

@@ -2101,7 +2101,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
+    // Fallback for HMR edge cases — return English defaults to prevent crash
+    return {
+      language: "en" as Language,
+      setLanguage: () => {},
+      t: (key: string) => translations.en[key] || key,
+      dir: "ltr" as const,
+    };
   }
   return context;
 };

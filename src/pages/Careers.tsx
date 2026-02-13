@@ -254,7 +254,7 @@ const Careers = () => {
                       {job.salary && (
                         <p className="mb-6 font-body text-charcoal">
                           <span className="font-medium">{t("careersPage.salary") || "Salary"}:</span>{" "}
-                          <span className="text-charcoal-light">{job.salary}</span>
+                          <span className="text-charcoal-light">{job.salary} $</span>
                         </p>
                       )}
 
