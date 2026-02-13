@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Bedir Group - Luxury Interior Design System */
+
+/* Bahij Font for Arabic - use Cairo as web fallback */
+@font-face {
+  font-family: 'Bahij';
+  src: local('Bahij TheSansArabic'), local('Bahij'), local('BahijTheSansArabic');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Smooth scroll behavior for the entire document */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Smooth page transitions */
+#root {
+  min-height: 100vh;
+}
+
+/* Arabic text styling */
+[dir="rtl"] body,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] a,
+[dir="rtl"] button,
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select,
+[dir="rtl"] label,
+[dir="rtl"] .font-display,
+[dir="rtl"] .font-body {
+  font-family: 'Bahij', 'Cairo', 'Arial', sans-serif !important;
+}
+
+/* Custom Scrollbar - Gold Theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f6f4f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c3a67d;
+  border-radius: 5px;
+  border: 2px solid #f6f4f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a68b5b;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c3a67d #f6f4f0;
+}
+
+/* Loading animation */
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@layer base {
+  :root {
+    /* Core Palette */
+    --background: 40 25% 95%; /* #f6f4f0 */
+    --foreground: 0 0% 10%; /* #1a1a1a */
+
+    --card: 40 20% 93%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 40 25% 95%;
+    --popover-foreground: 0 0% 10%;
+
+    /* Gold Accent - #c3a67d */
+    --primary: 35 39% 63%;
+    --primary-foreground: 0 0% 10%;
+
+    --secondary: 40 15% 90%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 40 10% 88%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 70 18% 38%; /* Olive #6d7350 */
+    --accent-foreground: 40 25% 95%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 40 15% 86%;
+    --input: 40 15% 86%;
+    --ring: 35 39% 63%;
+
+    --radius: 0.5rem;
+
+    /* Custom Design Tokens */
+    --gold: 35 39% 63%; /* #c3a67d */
+    --gold-light: 35 35% 72%;
+    --gold-dark: 35 45% 50%;
+    --bronze: 30 35% 48%;
+    --cream: 40 25% 95%; /* #f6f4f0 */
+    --cream-dark: 40 18% 90%;
+    --charcoal: 0 0% 10%; /* #1a1a1a */
+    --charcoal-light: 0 0% 22%;
+    --olive: 70 18% 38%; /* #6d7350 */
+    --olive-light: 70 15% 50%;
+    
+    /* Neon Accents for AI Section */
+    --neon-gold: 35 80% 60%;
+    --neon-glow: 0 0 40px hsl(35 80% 60% / 0.4);
+    
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(35 39% 63%), hsl(30 35% 48%));
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 10% / 0.7) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 5%) 100%);
+    
+    /* Shadows */
+    --shadow-luxury: 0 25px 50px -12px hsl(0 0% 10% / 0.15);
+    --shadow-card: 0 10px 40px -10px hsl(0 0% 10% / 0.1);
+    --shadow-glow: 0 0 60px hsl(35 39% 63% / 0.3);
+
+    /* Typography */
+    --font-display: 'century-gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+    --font-body: 'century-gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+
+    /* Sidebar (keeping defaults) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 40 20% 95%;
+
+    --card: 0 0% 9%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 35 39% 63%;
+    --primary-foreground: 0 0% 6%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 70 18% 45%;
+    --accent-foreground: 0 0% 6%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 35 39% 63%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  /* Luxury Button Variants */
+  .btn-luxury {
+    @apply relative overflow-hidden px-8 py-4 font-medium tracking-wide;
+    background: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--bronze)));
+    color: hsl(var(--cream));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 30px hsl(var(--gold) / 0.3);
+  }
+
+  .btn-luxury:hover {
+    box-shadow: 0 0 50px hsl(var(--gold) / 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-luxury::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--cream) / 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-luxury:hover::before {
+    left: 100%;
+  }
+
+  .btn-outline-luxury {
+    @apply px-8 py-4 font-medium tracking-wide border-2;
+    border-color: hsl(var(--charcoal));
+    color: hsl(var(--charcoal));
+    background: transparent;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-outline-luxury:hover {
+    background: hsl(var(--charcoal));
+    color: hsl(var(--cream));
+  }
+
+  /* Bento Card */
+  .bento-card {
+    @apply relative overflow-hidden rounded-2xl;
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-card);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bento-card:hover {
+    transform: scale(1.02) translateY(-5px);
+    box-shadow: var(--shadow-luxury);
+  }
+
+  /* Neon Glow Effect */
+  .neon-glow {
+    text-shadow: 0 0 20px hsl(var(--neon-gold)), 0 0 40px hsl(var(--neon-gold) / 0.5);
+  }
+
+  .neon-border {
+    box-shadow: 0 0 20px hsl(var(--neon-gold) / 0.3), inset 0 0 20px hsl(var(--neon-gold) / 0.1);
+    border: 1px solid hsl(var(--neon-gold) / 0.5);
+  }
+
+  /* Glass Effect */
+  .glass {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Text Gradient */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  /* Hide scrollbar for carousel */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
