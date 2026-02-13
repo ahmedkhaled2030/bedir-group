@@ -289,12 +289,12 @@ export const contactApi = {
 export function formatDate(dateStr: string, locale: string = "en"): string {
   const date = new Date(dateStr);
   const localeMap: Record<string, string> = {
-    en: "en-US",
+    en: "en-GB",
     ar: "ar-EG",
     fr: "fr-FR",
     de: "de-DE",
   };
-  return date.toLocaleDateString(localeMap[locale] || "en-US", {
+  return date.toLocaleDateString(localeMap[locale] || "en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",

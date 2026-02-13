@@ -276,12 +276,12 @@ function generateSlug(text: string): string {
 export function formatDate(dateString: string, lang: string = "en"): string {
   const date = new Date(dateString);
   const localeMap: Record<string, string> = {
-    en: "en-US",
+    en: "en-GB",
     ar: "ar-EG",
     fr: "fr-FR",
     de: "de-DE",
   };
-  return date.toLocaleDateString(localeMap[lang] || "en-US", {
+  return date.toLocaleDateString(localeMap[lang] || "en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",

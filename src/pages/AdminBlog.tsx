@@ -208,7 +208,7 @@ const AdminBlog = () => {
                 <div className="flex items-center gap-4 mt-2">
                   <span className="flex items-center gap-1 font-body text-xs text-charcoal-light">
                     <Calendar className="h-3 w-3" />
-                    {new Date(post.updated_at).toLocaleDateString()}
+                    {new Date(post.updated_at).toLocaleDateString("en-GB")}
                   </span>
                   <span className="font-body text-xs text-charcoal-light capitalize">
                     {post.category}

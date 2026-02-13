@@ -204,7 +204,7 @@ const AdminInquiries = () => {
 
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <span className="font-body text-xs text-charcoal-light hidden sm:block">
-                    {new Date(inq.created_at).toLocaleDateString()} ·{" "}
+                    {new Date(inq.created_at).toLocaleDateString("en-GB")} ·{" "}
                     {new Date(inq.created_at).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",

@@ -137,7 +137,7 @@ const AdminDashboard = () => {
                       {post.title[language] || post.title.en}
                     </p>
                     <p className="font-body text-xs text-charcoal-light mt-0.5">
-                      {new Date(post.updated_at).toLocaleDateString()}
+                      {new Date(post.updated_at).toLocaleDateString("en-GB")}
                     </p>
                   </div>
                   <span
@@ -270,7 +270,7 @@ const AdminDashboard = () => {
                   </p>
                 </div>
                 <span className="ml-3 font-body text-xs text-charcoal-light">
-                  {new Date(inq.created_at).toLocaleDateString()}
+                  {new Date(inq.created_at).toLocaleDateString("en-GB")}
                 </span>
               </Link>
             ))}
