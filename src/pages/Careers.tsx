@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, Clock, ArrowRight, Check, Loader2 } from "lucide-react";
+import { Briefcase, MapPin, Clock, ArrowRight, Check, Loader2, Heart, TrendingUp, Timer, Building2, Users, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,12 +8,12 @@ import AIModal from "@/components/AIModal";
 import { careersApi, type CareerPost } from "@/lib/api";
 
 const benefits = [
-  { titleKey: "careersPage.benefits.health.title", descKey: "careersPage.benefits.health.desc" },
-  { titleKey: "careersPage.benefits.growth.title", descKey: "careersPage.benefits.growth.desc" },
-  { titleKey: "careersPage.benefits.flexible.title", descKey: "careersPage.benefits.flexible.desc" },
-  { titleKey: "careersPage.benefits.projects.title", descKey: "careersPage.benefits.projects.desc" },
-  { titleKey: "careersPage.benefits.team.title", descKey: "careersPage.benefits.team.desc" },
-  { titleKey: "careersPage.benefits.bonus.title", descKey: "careersPage.benefits.bonus.desc" },
+  { titleKey: "careersPage.benefits.health.title", descKey: "careersPage.benefits.health.desc", icon: Heart },
+  { titleKey: "careersPage.benefits.growth.title", descKey: "careersPage.benefits.growth.desc", icon: TrendingUp },
+  { titleKey: "careersPage.benefits.flexible.title", descKey: "careersPage.benefits.flexible.desc", icon: Timer },
+  { titleKey: "careersPage.benefits.projects.title", descKey: "careersPage.benefits.projects.desc", icon: Building2 },
+  { titleKey: "careersPage.benefits.team.title", descKey: "careersPage.benefits.team.desc", icon: Users },
+  { titleKey: "careersPage.benefits.bonus.title", descKey: "careersPage.benefits.bonus.desc", icon: Award },
 ];
 
 const Careers = () => {
@@ -115,19 +115,25 @@ const Careers = () => {
           </motion.div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={benefit.titleKey}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="rounded-2xl bg-charcoal/5 p-8"
-              >
-                <h3 className="mb-3 font-display text-xl text-charcoal">{t(benefit.titleKey)}</h3>
-                <p className="font-body text-charcoal-light">{t(benefit.descKey)}</p>
-              </motion.div>
-            ))}
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <motion.div
+                  key={benefit.titleKey}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group rounded-2xl border border-charcoal/10 bg-white p-8 transition-all hover:border-gold/30 hover:shadow-lg"
+                >
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 transition-colors group-hover:bg-gold/20">
+                    <Icon className="h-6 w-6 text-gold" />
+                  </div>
+                  <h3 className="mb-3 font-display text-xl text-charcoal">{t(benefit.titleKey)}</h3>
+                  <p className="font-body leading-relaxed text-charcoal-light">{t(benefit.descKey)}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
