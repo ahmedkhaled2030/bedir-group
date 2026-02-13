@@ -121,7 +121,26 @@ const AdminBlog = () => {
       </div>
 
       {/* Posts List */}
-      {filteredPosts.length === 0 ? (
+      {loading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm border border-gray-100 animate-pulse">
+              <div className="hidden sm:block h-20 w-28 flex-shrink-0 rounded-xl bg-gray-200" />
+              <div className="flex-1 min-w-0 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-48 rounded bg-gray-200" />
+                  <div className="h-5 w-16 rounded-full bg-gray-100" />
+                </div>
+                <div className="h-4 w-3/4 rounded bg-gray-100" />
+                <div className="flex gap-4">
+                  <div className="h-3 w-24 rounded bg-gray-100" />
+                  <div className="h-3 w-20 rounded bg-gray-100" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredPosts.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

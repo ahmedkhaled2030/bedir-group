@@ -88,7 +88,26 @@ const AdminCareers = () => {
       </div>
 
       {/* Listings */}
-      {filteredCareers.length === 0 ? (
+      {loading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm border border-gray-100 animate-pulse">
+              <div className="h-12 w-12 rounded-xl bg-gray-200 flex-shrink-0" />
+              <div className="flex-1 min-w-0 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-40 rounded bg-gray-200" />
+                  <div className="h-5 w-14 rounded-full bg-gray-100" />
+                </div>
+                <div className="flex gap-4">
+                  <div className="h-3 w-24 rounded bg-gray-100" />
+                  <div className="h-3 w-20 rounded bg-gray-100" />
+                  <div className="h-3 w-28 rounded bg-gray-100" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredCareers.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

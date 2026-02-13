@@ -3,6 +3,8 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SuccessModal from "./SuccessModal";
+import { contactApi } from "@/lib/api";
+import { toast } from "sonner";
 
 const ContactSection = () => {
   const { t, dir } = useLanguage();
@@ -58,10 +60,29 @@ const ContactSection = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    setIsSuccessOpen(true);
+    setSubmitting(true);
+    try {
+      await contactApi.submitInquiry({
+        full_name: formData.fullName,
+        phone_number: formData.phoneNumber,
+        email: formData.email,
+        city: formData.city,
+        service_type: formData.serviceType,
+        project_type: formData.projectType,
+        budget: formData.budget,
+        message: formData.message,
+      });
+      setIsSuccessOpen(true);
+    } catch (err) {
+      console.error("Failed to submit inquiry:", err);
+      toast.error("Failed to submit. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCloseSuccess = () => {
@@ -297,11 +318,22 @@ const ContactSection = () => {
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                className="mt-6 w-full rounded-lg bg-charcoal py-4 font-body text-sm font-medium uppercase tracking-wider text-cream transition-all hover:bg-charcoal/90"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
+                disabled={submitting}
+                className="mt-6 w-full rounded-lg bg-charcoal py-4 font-body text-sm font-medium uppercase tracking-wider text-cream transition-all hover:bg-charcoal/90 disabled:opacity-60 disabled:cursor-not-allowed"
+                whileHover={{ scale: submitting ? 1 : 1.01 }}
+                whileTap={{ scale: submitting ? 1 : 0.99 }}
               >
-                {t("contact.form.submit")}
+                {submitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Sending...
+                  </span>
+                ) : (
+                  t("contact.form.submit")
+                )}
               </motion.button>
             </form>
           </motion.div>

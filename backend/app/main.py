@@ -9,6 +9,7 @@ from app.database import connect_db, close_db
 from app.routes.auth import router as auth_router
 from app.routes.blog import router as blog_router
 from app.routes.careers import router as careers_router
+from app.routes.contact import router as contact_router
 
 settings = get_settings()
 
@@ -60,6 +61,7 @@ except Exception:
 app.include_router(auth_router)
 app.include_router(blog_router)
 app.include_router(careers_router)
+app.include_router(contact_router)
 
 
 @app.get("/api/health")

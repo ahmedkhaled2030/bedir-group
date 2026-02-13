@@ -1,23 +1,26 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { FileText, Briefcase, Eye, TrendingUp, Plus } from "lucide-react";
+import { FileText, Briefcase, Eye, TrendingUp, Plus, Mail, Inbox } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { blogApi, careersApi, type BlogPost, type CareerPost } from "@/lib/api";
+import { blogApi, careersApi, contactApi, type BlogPost, type CareerPost, type ContactInquiry } from "@/lib/api";
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [careerPosts, setCareerPosts] = useState<CareerPost[]>([]);
+  const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
 
   useEffect(() => {
     blogApi.getAllPosts().then(setBlogPosts).catch(console.error);
     careersApi.getAllCareers().then(setCareerPosts).catch(console.error);
+    contactApi.getAllInquiries().then(setInquiries).catch(console.error);
   }, []);
 
   const publishedPosts = blogPosts.filter((p) => p.status === "published").length;
   const draftPosts = blogPosts.filter((p) => p.status === "draft").length;
   const activeCareers = careerPosts.filter((c) => c.status === "active").length;
+  const unreadInquiries = inquiries.filter((i) => !i.read).length;
 
   const stats = [
     {
@@ -48,6 +51,13 @@ const AdminDashboard = () => {
       color: "bg-purple-500",
       lightColor: "bg-purple-50 text-purple-600",
     },
+    {
+      label: "New Inquiries",
+      value: unreadInquiries,
+      icon: Inbox,
+      color: "bg-red-500",
+      lightColor: "bg-red-50 text-red-600",
+    },
   ];
 
   return (
@@ -63,7 +73,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 mb-8">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
@@ -203,6 +213,70 @@ const AdminDashboard = () => {
           )}
         </motion.div>
       </div>
+
+      {/* Recent Inquiries */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="font-display text-lg text-charcoal">
+            Recent Inquiries
+            {unreadInquiries > 0 && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-600">
+                {unreadInquiries} new
+              </span>
+            )}
+          </h3>
+          <Link
+            to="/admin/inquiries"
+            className="flex items-center gap-1.5 rounded-lg bg-charcoal px-4 py-2 font-body text-xs font-medium text-cream hover:bg-charcoal/90 transition-colors"
+          >
+            <Mail className="h-3.5 w-3.5" />
+            View All
+          </Link>
+        </div>
+
+        {inquiries.length === 0 ? (
+          <div className="text-center py-8">
+            <Inbox className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+            <p className="font-body text-sm text-charcoal-light">
+              No inquiries yet
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {inquiries.slice(0, 5).map((inq) => (
+              <Link
+                key={inq.id}
+                to="/admin/inquiries"
+                className={`flex items-center justify-between rounded-xl px-4 py-3 hover:bg-gray-50 transition-colors group ${
+                  !inq.read ? "bg-gold/[0.03]" : ""
+                }`}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className={`font-body text-sm text-charcoal truncate group-hover:text-gold transition-colors ${!inq.read ? "font-semibold" : ""}`}>
+                      {inq.full_name}
+                    </p>
+                    {!inq.read && (
+                      <span className="h-2 w-2 rounded-full bg-gold flex-shrink-0" />
+                    )}
+                  </div>
+                  <p className="font-body text-xs text-charcoal-light mt-0.5 truncate">
+                    {inq.service_type} · {inq.email}
+                  </p>
+                </div>
+                <span className="ml-3 font-body text-xs text-charcoal-light">
+                  {new Date(inq.created_at).toLocaleDateString()}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 };

@@ -78,7 +78,7 @@ const Hero = ({ onOpenAIModal }: HeroProps) => {
           {/* Tagline */}
           <motion.p
             variants={fadeUpVariants}
-            className="my-10 font-body  text-sm uppercase tracking-[0.3em] text-cream/80"
+            className="mt-16 mb-10 font-body text-sm uppercase tracking-[0.3em] text-cream/80"
           >
             {t("hero.tagline")}
           </motion.p>

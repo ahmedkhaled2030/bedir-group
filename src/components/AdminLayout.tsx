@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   Menu,
   User,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +18,7 @@ const sidebarLinks = [
   { key: "admin.dashboard", href: "/admin", icon: LayoutDashboard, end: true },
   { key: "admin.blogPosts", href: "/admin/blog", icon: FileText, end: false },
   { key: "admin.careers", href: "/admin/careers", icon: Briefcase, end: false },
+  { key: "admin.inquiries", href: "/admin/inquiries", icon: Mail, end: false },
 ];
 
 const AdminLayout = () => {

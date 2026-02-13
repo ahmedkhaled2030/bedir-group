@@ -35,6 +35,7 @@ const AdminBlog = lazy(() => import("./pages/AdminBlog"));
 const AdminBlogEditor = lazy(() => import("./pages/AdminBlogEditor"));
 const AdminCareers = lazy(() => import("./pages/AdminCareers"));
 const AdminCareerEditor = lazy(() => import("./pages/AdminCareerEditor"));
+const AdminInquiries = lazy(() => import("./pages/AdminInquiries"));
 
 const queryClient = new QueryClient();
 
@@ -102,6 +103,7 @@ const App = () => (
                   <Route path="careers" element={<AdminCareers />} />
                   <Route path="careers/new" element={<AdminCareerEditor />} />
                   <Route path="careers/edit/:id" element={<AdminCareerEditor />} />
+                  <Route path="inquiries" element={<AdminInquiries />} />
                 </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

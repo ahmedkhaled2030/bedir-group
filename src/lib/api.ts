@@ -233,6 +233,57 @@ export const careersApi = {
     apiFetch<void>(`/api/careers/admin/posts/${id}`, { method: "DELETE" }),
 };
 
+// ─── Contact / Inquiries API ──────────────────────────────
+
+export interface ContactInquiry {
+  id: string;
+  full_name: string;
+  phone_number: string;
+  email: string;
+  city: string;
+  service_type: string;
+  project_type: string;
+  budget: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+}
+
+export interface ContactInquiryInput {
+  full_name: string;
+  phone_number: string;
+  email: string;
+  city: string;
+  service_type: string;
+  project_type: string;
+  budget: string;
+  message: string;
+}
+
+export const contactApi = {
+  // Public
+  submitInquiry: (data: ContactInquiryInput) =>
+    apiFetch<ContactInquiry>("/api/contact/inquiries", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  // Admin
+  getAllInquiries: (params?: { read?: boolean }) => {
+    const query = new URLSearchParams();
+    if (params?.read !== undefined) query.set("read", String(params.read));
+    return apiFetch<ContactInquiry[]>(`/api/contact/admin/inquiries?${query}`);
+  },
+
+  markAsRead: (id: string) =>
+    apiFetch<ContactInquiry>(`/api/contact/admin/inquiries/${id}`, {
+      method: "PATCH",
+    }),
+
+  deleteInquiry: (id: string) =>
+    apiFetch<void>(`/api/contact/admin/inquiries/${id}`, { method: "DELETE" }),
+};
+
 // ─── Helpers ──────────────────────────────────────────────
 
 export function formatDate(dateStr: string, locale: string = "en"): string {

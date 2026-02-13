@@ -117,3 +117,24 @@ class CareerPostOut(CareerPostBase):
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+# ─── Contact Inquiries ─────────────────────────────────────
+
+class ContactInquiryCreate(BaseModel):
+    full_name: str
+    phone_number: str
+    email: EmailStr
+    city: str = ""
+    service_type: str = ""
+    project_type: str = ""
+    budget: str = ""
+    message: str = ""
+
+
+class ContactInquiryOut(ContactInquiryCreate):
+    id: str
+    read: bool = False
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
