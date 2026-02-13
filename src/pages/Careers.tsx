@@ -1,83 +1,59 @@
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, Clock, ArrowRight, Check } from "lucide-react";
+import { Briefcase, MapPin, Clock, ArrowRight, Check, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AIModal from "@/components/AIModal";
-
-const jobOpenings = [
-  {
-    id: 1,
-    titleKey: "careers.jobs.seniorDesigner.title",
-    department: "careers.departments.design",
-    location: "Cairo, Egypt",
-    type: "careers.types.fullTime",
-    descKey: "careers.jobs.seniorDesigner.desc",
-    requirements: [
-      "careers.jobs.seniorDesigner.req1",
-      "careers.jobs.seniorDesigner.req2",
-      "careers.jobs.seniorDesigner.req3",
-      "careers.jobs.seniorDesigner.req4",
-    ],
-  },
-  {
-    id: 2,
-    titleKey: "careers.jobs.projectManager.title",
-    department: "careers.departments.operations",
-    location: "Sheikh Zayed, Egypt",
-    type: "careers.types.fullTime",
-    descKey: "careers.jobs.projectManager.desc",
-    requirements: [
-      "careers.jobs.projectManager.req1",
-      "careers.jobs.projectManager.req2",
-      "careers.jobs.projectManager.req3",
-      "careers.jobs.projectManager.req4",
-    ],
-  },
-  {
-    id: 3,
-    titleKey: "careers.jobs.3dArtist.title",
-    department: "careers.departments.visualization",
-    location: "Remote",
-    type: "careers.types.contract",
-    descKey: "careers.jobs.3dArtist.desc",
-    requirements: [
-      "careers.jobs.3dArtist.req1",
-      "careers.jobs.3dArtist.req2",
-      "careers.jobs.3dArtist.req3",
-      "careers.jobs.3dArtist.req4",
-    ],
-  },
-  {
-    id: 4,
-    titleKey: "careers.jobs.juniorDesigner.title",
-    department: "careers.departments.design",
-    location: "Cairo, Egypt",
-    type: "careers.types.fullTime",
-    descKey: "careers.jobs.juniorDesigner.desc",
-    requirements: [
-      "careers.jobs.juniorDesigner.req1",
-      "careers.jobs.juniorDesigner.req2",
-      "careers.jobs.juniorDesigner.req3",
-      "careers.jobs.juniorDesigner.req4",
-    ],
-  },
-];
+import { careersApi, type CareerPost } from "@/lib/api";
 
 const benefits = [
-  { titleKey: "careers.benefits.health.title", descKey: "careers.benefits.health.desc" },
-  { titleKey: "careers.benefits.growth.title", descKey: "careers.benefits.growth.desc" },
-  { titleKey: "careers.benefits.flexible.title", descKey: "careers.benefits.flexible.desc" },
-  { titleKey: "careers.benefits.projects.title", descKey: "careers.benefits.projects.desc" },
-  { titleKey: "careers.benefits.team.title", descKey: "careers.benefits.team.desc" },
-  { titleKey: "careers.benefits.bonus.title", descKey: "careers.benefits.bonus.desc" },
+  { titleKey: "careersPage.benefits.health.title", descKey: "careersPage.benefits.health.desc" },
+  { titleKey: "careersPage.benefits.growth.title", descKey: "careersPage.benefits.growth.desc" },
+  { titleKey: "careersPage.benefits.flexible.title", descKey: "careersPage.benefits.flexible.desc" },
+  { titleKey: "careersPage.benefits.projects.title", descKey: "careersPage.benefits.projects.desc" },
+  { titleKey: "careersPage.benefits.team.title", descKey: "careersPage.benefits.team.desc" },
+  { titleKey: "careersPage.benefits.bonus.title", descKey: "careersPage.benefits.bonus.desc" },
 ];
 
 const Careers = () => {
-  const { t, dir } = useLanguage();
+  const { t, dir, language } = useLanguage();
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
-  const [expandedJob, setExpandedJob] = useState<number | null>(null);
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [careers, setCareers] = useState<CareerPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await careersApi.getActiveCareers();
+        setCareers(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load careers");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCareers();
+  }, []);
+
+  // Helper to get localized text from a field that can be string or { en, ar, fr, de }
+  const getLocalized = (field: any): string => {
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    return field[language] || field.en || Object.values(field)[0] || "";
+  };
+
+  // Helper to get localized array
+  const getLocalizedArray = (field: any): string[] => {
+    if (!field) return [];
+    if (Array.isArray(field)) return field;
+    const arr = field[language] || field.en || Object.values(field)[0];
+    return Array.isArray(arr) ? arr : [];
+  };
 
   return (
     <div className="min-h-screen bg-cream" dir={dir}>
@@ -174,71 +150,121 @@ const Careers = () => {
             </h2>
           </motion.div>
 
-          <div className="space-y-4">
-            {jobOpenings.map((job, index) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="overflow-hidden rounded-2xl bg-cream"
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-gold" />
+            </div>
+          ) : error ? (
+            <div className="py-20 text-center">
+              <p className="mb-4 font-body text-cream/60">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="rounded-full bg-gold px-6 py-2 font-body text-sm text-charcoal"
               >
-                <button
-                  onClick={() => setExpandedJob(expandedJob === job.id ? null : job.id)}
-                  className="flex w-full items-center justify-between p-6 text-left"
+                {t("common.retry") || "Retry"}
+              </button>
+            </div>
+          ) : careers.length === 0 ? (
+            <div className="py-20 text-center">
+              <Briefcase className="mx-auto mb-4 h-12 w-12 text-cream/30" />
+              <p className="font-body text-lg text-cream/60">
+                {t("careersPage.noOpenings") || "No open positions at the moment. Check back soon!"}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {careers.map((job, index) => (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="overflow-hidden rounded-2xl bg-cream"
                 >
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10">
-                      <Briefcase className="h-6 w-6 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-display text-xl text-charcoal">{t(job.titleKey)}</h3>
-                      <p className="font-body text-sm text-charcoal-light">{t(job.department)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="hidden items-center gap-4 md:flex">
-                      <span className="flex items-center gap-1 font-body text-sm text-charcoal-light">
-                        <MapPin className="h-4 w-4" /> {job.location}
-                      </span>
-                      <span className="flex items-center gap-1 font-body text-sm text-charcoal-light">
-                        <Clock className="h-4 w-4" /> {t(job.type)}
-                      </span>
-                    </div>
-                    <ArrowRight className={`h-5 w-5 text-charcoal transition-transform ${expandedJob === job.id ? "rotate-90" : ""}`} />
-                  </div>
-                </button>
-
-                {expandedJob === job.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="border-t border-charcoal/10 p-6"
+                  <button
+                    onClick={() => setExpandedJob(expandedJob === job.id ? null : job.id)}
+                    className="flex w-full items-center justify-between p-6 text-left"
                   >
-                    <p className="mb-6 font-body text-charcoal-light">{t(job.descKey)}</p>
-                    <h4 className="mb-4 font-display text-lg text-charcoal">{t("careersPage.requirements")}</h4>
-                    <ul className="mb-8 space-y-2">
-                      {job.requirements.map((req) => (
-                        <li key={req} className="flex items-center gap-3 font-body text-charcoal-light">
-                          <Check className="h-4 w-4 text-gold" />
-                          {t(req)}
-                        </li>
-                      ))}
-                    </ul>
-                    <a
-                      href={`mailto:careers@bedirgroup.com?subject=Application for ${t(job.titleKey)}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-body text-sm font-medium text-charcoal transition-all hover:bg-gold-light"
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10">
+                        <Briefcase className="h-6 w-6 text-gold" />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-xl text-charcoal">{getLocalized(job.title)}</h3>
+                        <p className="font-body text-sm text-charcoal-light">{getLocalized(job.department)}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="hidden items-center gap-4 md:flex">
+                        <span className="flex items-center gap-1 font-body text-sm text-charcoal-light">
+                          <MapPin className="h-4 w-4" /> {job.location}
+                        </span>
+                        <span className="flex items-center gap-1 rounded-full bg-olive/10 px-3 py-1 font-body text-xs text-olive capitalize">
+                          <Clock className="h-3 w-3" /> {job.job_type}
+                        </span>
+                      </div>
+                      <ArrowRight className={`h-5 w-5 text-charcoal transition-transform ${expandedJob === job.id ? "rotate-90" : ""}`} />
+                    </div>
+                  </button>
+
+                  {expandedJob === job.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="border-t border-charcoal/10 p-6"
                     >
-                      {t("careersPage.applyNow")}
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                  </motion.div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+                      <p className="mb-6 font-body text-charcoal-light">{getLocalized(job.description)}</p>
+
+                      {getLocalizedArray(job.requirements).length > 0 && (
+                        <>
+                          <h4 className="mb-4 font-display text-lg text-charcoal">{t("careersPage.requirements")}</h4>
+                          <ul className="mb-6 space-y-2">
+                            {getLocalizedArray(job.requirements).map((req, i) => (
+                              <li key={i} className="flex items-center gap-3 font-body text-charcoal-light">
+                                <Check className="h-4 w-4 flex-shrink-0 text-gold" />
+                                {req}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+
+                      {getLocalizedArray(job.benefits).length > 0 && (
+                        <>
+                          <h4 className="mb-4 font-display text-lg text-charcoal">{t("careersPage.benefitsTitle") || "Benefits"}</h4>
+                          <ul className="mb-6 space-y-2">
+                            {getLocalizedArray(job.benefits).map((ben, i) => (
+                              <li key={i} className="flex items-center gap-3 font-body text-charcoal-light">
+                                <Check className="h-4 w-4 flex-shrink-0 text-olive" />
+                                {ben}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+
+                      {job.salary && (
+                        <p className="mb-6 font-body text-charcoal">
+                          <span className="font-medium">{t("careersPage.salary") || "Salary"}:</span>{" "}
+                          <span className="text-charcoal-light">{job.salary}</span>
+                        </p>
+                      )}
+
+                      <a
+                        href={`mailto:${job.application_email || "careers@bedirgroup.com"}?subject=Application for ${getLocalized(job.title)}`}
+                        className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-body text-sm font-medium text-charcoal transition-all hover:bg-gold-light"
+                      >
+                        {t("careersPage.applyNow")}
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    </motion.div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
