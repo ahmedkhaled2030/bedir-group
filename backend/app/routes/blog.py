@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Query
+from fastapi.responses import Response
 from datetime import datetime, timezone
 from typing import Optional
 from bson import ObjectId
 import re
 import os
 import uuid
-import aiofiles
+import base64
 
 from app.models import (
     BlogPostCreate,
@@ -192,13 +193,31 @@ async def upload_image(
     if len(content) > settings.MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="File too large (max 10MB)")
 
-    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-
     ext = file.filename.split(".")[-1] if file.filename else "jpg"
     filename = f"{uuid.uuid4().hex}.{ext}"
-    filepath = os.path.join(settings.UPLOAD_DIR, filename)
 
-    async with aiofiles.open(filepath, "wb") as f:
-        await f.write(content)
+    # Store image in MongoDB for serverless compatibility
+    db = get_db()
+    await db.images.insert_one({
+        "filename": filename,
+        "content_type": file.content_type,
+        "data": base64.b64encode(content).decode("utf-8"),
+        "created_at": datetime.now(timezone.utc),
+    })
 
-    return {"url": f"/uploads/{filename}"}
+    return {"url": f"/api/blog/images/{filename}"}
+
+
+@router.get("/images/{filename}")
+async def get_image(filename: str):
+    db = get_db()
+    image = await db.images.find_one({"filename": filename})
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    data = base64.b64decode(image["data"])
+    return Response(
+        content=data,
+        media_type=image.get("content_type", "image/jpeg"),
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
