@@ -69,7 +69,40 @@ const BlogPostPage = () => {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading || !post) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-cream" dir={dir}>
+        <Navbar onOpenAIModal={() => setIsAIModalOpen(true)} />
+        <section className="relative pt-24 bg-charcoal overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-charcoal-light" />
+          <div className="container mx-auto px-4 relative z-10 py-16 md:py-24">
+            <div className="max-w-3xl mx-auto text-center animate-pulse space-y-6">
+              <div className="h-4 w-32 mx-auto rounded bg-cream/20" />
+              <div className="flex items-center justify-center gap-3">
+                <div className="h-6 w-24 rounded-full bg-cream/15" />
+                <div className="h-4 w-20 rounded bg-cream/10" />
+              </div>
+              <div className="h-10 w-3/4 mx-auto rounded bg-cream/20" />
+              <div className="h-10 w-1/2 mx-auto rounded bg-cream/15" />
+              <div className="h-4 w-40 mx-auto rounded bg-cream/10" />
+            </div>
+          </div>
+        </section>
+        <div className="container mx-auto px-4 py-12 max-w-3xl animate-pulse space-y-4">
+          <div className="h-4 w-full rounded bg-charcoal/10" />
+          <div className="h-4 w-5/6 rounded bg-charcoal/10" />
+          <div className="h-4 w-4/6 rounded bg-charcoal/5" />
+          <div className="h-40 w-full rounded-xl bg-charcoal/5 mt-6" />
+          <div className="h-4 w-full rounded bg-charcoal/10 mt-6" />
+          <div className="h-4 w-3/4 rounded bg-charcoal/10" />
+          <div className="h-4 w-5/6 rounded bg-charcoal/5" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!post) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center" dir={dir}>
         <div className="text-center">

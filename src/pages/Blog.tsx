@@ -33,9 +33,14 @@ const Blog = () => {
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    blogApi.getPosts().then(setAllPosts).catch(console.error);
+    setLoading(true);
+    blogApi.getPosts()
+      .then(setAllPosts)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const featuredPosts = allPosts.filter((p) => p.featured);
@@ -155,7 +160,24 @@ const Blog = () => {
             </h2>
           )}
 
-          {filteredPosts.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="rounded-2xl bg-white overflow-hidden shadow-sm border border-charcoal/5 animate-pulse">
+                  <div className="aspect-[16/10] bg-charcoal/10" />
+                  <div className="p-5 space-y-3">
+                    <div className="flex gap-3">
+                      <div className="h-6 w-24 rounded-full bg-charcoal/10" />
+                      <div className="h-6 w-16 rounded-full bg-charcoal/10" />
+                    </div>
+                    <div className="h-5 w-3/4 rounded bg-charcoal/10" />
+                    <div className="h-4 w-full rounded bg-charcoal/5" />
+                    <div className="h-4 w-2/3 rounded bg-charcoal/5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredPosts.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
