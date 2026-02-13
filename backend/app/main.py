@@ -49,8 +49,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static files (uploaded images)
-app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
+# Static files (uploaded images) — only mount if directory exists (skipped in serverless)
+try:
+    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
+except Exception:
+    pass  # In serverless environments, static file mount may not be available
 
 # Routes
 app.include_router(auth_router)
@@ -61,3 +65,12 @@ app.include_router(careers_router)
 @app.get("/api/health")
 async def health_check():
     return {"status": "ok", "service": "Bedir Group API"}
+
+
+# Ensure DB connection on first request (for serverless where lifespan may not fire)
+@app.middleware("http")
+async def ensure_db_connection(request, call_next):
+    from app.database import db as _db, connect_db as _connect
+    if _db is None:
+        await _connect()
+    return await call_next(request)
