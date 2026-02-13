@@ -5,16 +5,29 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { blogApi, careersApi, contactApi, type BlogPost, type CareerPost, type ContactInquiry } from "@/lib/api";
 
+const SkeletonRow = () => (
+  <div className="flex items-center justify-between rounded-xl px-4 py-3 animate-pulse">
+    <div className="min-w-0 flex-1 space-y-2">
+      <div className="h-4 w-3/4 rounded-md bg-gray-200" />
+      <div className="h-3 w-1/2 rounded-md bg-gray-100" />
+    </div>
+    <div className="ml-3 h-5 w-16 rounded-full bg-gray-200" />
+  </div>
+);
+
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [careerPosts, setCareerPosts] = useState<CareerPost[]>([]);
   const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
+  const [loadingCareers, setLoadingCareers] = useState(true);
+  const [loadingInquiries, setLoadingInquiries] = useState(true);
 
   useEffect(() => {
-    blogApi.getAllPosts().then(setBlogPosts).catch(console.error);
-    careersApi.getAllCareers().then(setCareerPosts).catch(console.error);
-    contactApi.getAllInquiries().then(setInquiries).catch(console.error);
+    blogApi.getAllPosts().then(setBlogPosts).catch(console.error).finally(() => setLoadingPosts(false));
+    careersApi.getAllCareers().then(setCareerPosts).catch(console.error).finally(() => setLoadingCareers(false));
+    contactApi.getAllInquiries().then(setInquiries).catch(console.error).finally(() => setLoadingInquiries(false));
   }, []);
 
   const publishedPosts = blogPosts.filter((p) => p.status === "published").length;
@@ -117,7 +130,11 @@ const AdminDashboard = () => {
             </Link>
           </div>
 
-          {blogPosts.length === 0 ? (
+          {loadingPosts ? (
+            <div className="space-y-3">
+              {[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}
+            </div>
+          ) : blogPosts.length === 0 ? (
             <div className="text-center py-8">
               <FileText className="h-10 w-10 text-gray-300 mx-auto mb-3" />
               <p className="font-body text-sm text-charcoal-light">
@@ -175,7 +192,11 @@ const AdminDashboard = () => {
             </Link>
           </div>
 
-          {careerPosts.length === 0 ? (
+          {loadingCareers ? (
+            <div className="space-y-3">
+              {[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}
+            </div>
+          ) : careerPosts.length === 0 ? (
             <div className="text-center py-8">
               <Briefcase className="h-10 w-10 text-gray-300 mx-auto mb-3" />
               <p className="font-body text-sm text-charcoal-light">
@@ -239,7 +260,11 @@ const AdminDashboard = () => {
           </Link>
         </div>
 
-        {inquiries.length === 0 ? (
+        {loadingInquiries ? (
+          <div className="space-y-3">
+            {[...Array(4)].map((_, i) => <SkeletonRow key={i} />)}
+          </div>
+        ) : inquiries.length === 0 ? (
           <div className="text-center py-8">
             <Inbox className="h-10 w-10 text-gray-300 mx-auto mb-3" />
             <p className="font-body text-sm text-charcoal-light">
